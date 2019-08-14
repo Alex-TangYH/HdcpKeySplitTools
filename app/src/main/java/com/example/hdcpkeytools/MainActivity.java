@@ -1,6 +1,7 @@
 package com.example.hdcpkeytools;
 
 import android.os.Bundle;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,17 +15,20 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        TextView tv_centerText = findViewById(R.id.tv_centerText);
+        tv_centerText.setText("准备生成HDCP KEY生产资料");
         ConfigurationBean configurationBean = readConfiguration();
 
         if (configurationBean == null ){
             Toast.makeText(this, "找不到配置文件：udisk/HDCP_OR_KEY/config.ini", Toast.LENGTH_LONG).show();
+            tv_centerText.setText("找不到配置文件：udisk/HDCP_OR_KEY/config.ini");
             return;
         }
 
         String path = new FileUtils(this).searchFileInHDCPPath("or_key.bin");
         if (path == null) {
             Toast.makeText(this, "找不到文件：udisk/HDCP_OR_KEY/or_key.bin", Toast.LENGTH_LONG).show();
+            tv_centerText.setText("找不到文件：udisk/HDCP_OR_KEY/or_key.bin");
         } else {
             String udiskPath = path.split("HDCP_OR_KEY/or_key.bin")[0];
             String outputPath = udiskPath + Objects.requireNonNull(configurationBean).getOutputPath();
@@ -37,10 +41,11 @@ public class MainActivity extends AppCompatActivity {
                             , configurationBean.getSparePartsNumber()
                             , configurationBean.getSpareKeysNumber()
                             , outputPath);
-            new Md5Utils().getMd5OfDirToFile(outputPath, udiskPath + "md5.txt");
+            new Md5Utils().getMd5OfDirToFile(outputPath, udiskPath + "MD5.txt");
             //移动MD5到输出的目录中
-            new File(udiskPath + "md5.txt").renameTo(new File(outputPath + "md5.txt"));
+            new File(udiskPath + "MD5.txt").renameTo(new File(outputPath + "MD5.txt"));
             Toast.makeText(this, "HDCP KEY资料已生成，存放路径为："+outputPath, Toast.LENGTH_LONG).show();
+            tv_centerText.setText("HDCP KEY资料已生成，存放路径为："+outputPath);
         }
     }
 
