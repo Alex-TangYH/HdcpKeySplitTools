@@ -5,6 +5,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.io.File;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -29,7 +31,9 @@ public class MainActivity extends AppCompatActivity {
                             , 100
                             , 200
                             , outputPath);
-            new Md5Utils().getMd5OfDirToFile(outputPath, udiskPath + "/md5.txt");
+            new Md5Utils().getMd5OfDirToFile(outputPath, udiskPath + "md5.txt");
+            //移动MD5到输出的目录中
+            new File(udiskPath + "/md5.txt").renameTo(new File(outputPath + "md5.txt"));
         }
     }
 }
