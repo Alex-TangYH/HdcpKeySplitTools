@@ -106,7 +106,7 @@ public class CutHdcpKeyTestUtils {
         try {
             //把当前数量写入bytes数组中的前缀
             for (int i = 0; i < preCountOfHdcpKeySize; i++) {
-                bytes[i] = (byte) (keyNumber >> (preCountOfHdcpKeySize - i) * 8);
+                bytes[i] = (byte) (keyNumber >> (preCountOfHdcpKeySize - i - 1) * 8);
             }
 
             //当前坐标+KEY长度*KEY数量
