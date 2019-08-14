@@ -3,21 +3,61 @@ package com.example.hdcpkeytools;
 import android.content.Context;
 import android.os.Environment;
 import android.os.storage.StorageManager;
+import android.util.Log;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 
 public class FileUtils {
+    private static final String COMMENT_MARK = "#";
     private static final String FOLDER_SEPARATOR = "/";
     public final static String HDCP_KEY_DIR_PATH = "HDCP_OR_KEY";
     private Context mContext;
 
-    public FileUtils(Context context){
+    public FileUtils(Context context) {
         mContext = context;
+    }
+
+    /**
+     * 按行读取文件，跳过以COMMENT_MARK开头的行和空行
+     *
+     * @param filePath 文件路径
+     * @return ArrayList<String>，每个元素为文件中的一行
+     */
+    public static ArrayList<String> readFileByLine(String filePath) {
+        ArrayList<String> lineList = new ArrayList<>();
+        File file = new File(filePath);
+        if (file.isDirectory()) {
+            Log.d("hdcpKeyTool", "This is a directory.");
+        } else try {
+            InputStream inputStream = new FileInputStream(file);
+            InputStreamReader inputReader = new InputStreamReader(inputStream);
+            BufferedReader buffReader = new BufferedReader(inputReader);
+            String line;
+            //分行读取
+            while ((line = buffReader.readLine()) != null) {
+                if (line.startsWith(COMMENT_MARK) || line.trim().equals("")) {
+                    continue;
+                }
+                lineList.add(line);
+            }
+            inputStream.close();
+        } catch (java.io.FileNotFoundException e) {
+            Log.d("hdcpKeyTool", "The File doesn't not exist.");
+        } catch (IOException e) {
+            Log.d("hdcpKeyTool", Objects.requireNonNull(e.getMessage()));
+        }
+        return lineList;
     }
 
     /**
@@ -94,7 +134,7 @@ public class FileUtils {
         public List<MountPoint> getMountedPoint() {
             List<MountPoint> result = this.getMountPoint();
             Iterator<MountPoint> iterator = result.iterator();
-            while(iterator.hasNext()){
+            while (iterator.hasNext()) {
                 MountPoint value = iterator.next();
                 if (!value.isMounted) {
                     iterator.remove();
