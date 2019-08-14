@@ -12,21 +12,24 @@ public class CutHdcpKeyTestUtils {
     private final static int DEFAULT_SPARE_PARTS_KEY_NUMBER_PER_FILE = 500;
     private final static int DEFAULT_SPARE_KEYS_KEY_NUMBER_PER_FILE = 300;
     private final static int GIEC_HDCP_KEY_LENGTH = 308;
-    //TODO 指定的获取目录修改为U盘
-    //TODO 指定的输出目录修改为U盘
     private final static String DEFAULT_OUTPUT_ROOT_PATH = "/sdcard/HDCP_KEY/";
     private final static String AMLOGIC_HDCP_KEY_FILE_NAME = "HDCP_LIENCE";
     private int mIndexOfKey = 0;
     private String mOrderName;
 
-
     public void cutKeyFile(String originalFilePath, String orderName
             , int cargoKeyNumber, int shippingSampleNumber
             , int sparePartsNumber, int spareKeysNumber) {
+        cutKeyFile(originalFilePath, orderName, cargoKeyNumber, shippingSampleNumber, sparePartsNumber,spareKeysNumber, DEFAULT_OUTPUT_ROOT_PATH);
+    }
+
+    public void cutKeyFile(String originalFilePath, String orderName
+            , int cargoKeyNumber, int shippingSampleNumber
+            , int sparePartsNumber, int spareKeysNumber, String outputPath) {
         mOrderName = orderName;
 
-        if (!new File(DEFAULT_OUTPUT_ROOT_PATH).exists()) {
-            new File(DEFAULT_OUTPUT_ROOT_PATH).mkdir();
+        if (!new File(outputPath).exists()) {
+            new File(outputPath).mkdir();
         }
 
         // 按以下顺序截取KEY数据输出到文件
@@ -34,26 +37,26 @@ public class CutHdcpKeyTestUtils {
         int dir_sn = 1;
 
         // 截取出大货KEY的数据
-        String cargoKeyDir = DEFAULT_OUTPUT_ROOT_PATH + dir_sn++ + "_大货KEY_" + cargoKeyNumber + "个" + "/";
+        String cargoKeyDir = outputPath + dir_sn++ + "_大货KEY_" + cargoKeyNumber + "个" + "/";
         getOutputKeyFiles(originalFilePath, cargoKeyNumber, DEFAULT_CARGO_KEY_NUMBER_PER_FILE, cargoKeyDir);
 
         // 截取出船样KEY的数据
         if (shippingSampleNumber > 0) {
-            String shippingSampleKeyDir = DEFAULT_OUTPUT_ROOT_PATH + dir_sn++ + "_船样KEY_" + shippingSampleNumber + "个" + "/";
+            String shippingSampleKeyDir = outputPath + dir_sn++ + "_船样KEY_" + shippingSampleNumber + "个" + "/";
             getOutputKeyFiles(originalFilePath, cargoKeyNumber + shippingSampleNumber
                     , DEFAULT_SHIPPING_SAMPLE_KEY_NUMBER_PER_FILE, shippingSampleKeyDir);
         }
 
         // 截取出备件KEY的数据
         if (sparePartsNumber > 0) {
-            String sparePartsKeyDir = DEFAULT_OUTPUT_ROOT_PATH + dir_sn++ + "_备品KEY_" + sparePartsNumber + "个" + "/";
+            String sparePartsKeyDir = outputPath + dir_sn++ + "_备品KEY_" + sparePartsNumber + "个" + "/";
             getOutputKeyFiles(originalFilePath, cargoKeyNumber + shippingSampleNumber + sparePartsNumber
                     , DEFAULT_SPARE_PARTS_KEY_NUMBER_PER_FILE, sparePartsKeyDir);
         }
 
         // 截取出备用KEY的数据
         if (spareKeysNumber > 0) {
-            String spareKeysDir = DEFAULT_OUTPUT_ROOT_PATH + dir_sn + "_备用KEY_" + spareKeysNumber + "个" + "/";
+            String spareKeysDir = outputPath + dir_sn + "_备用KEY_" + spareKeysNumber + "个" + "/";
             getOutputKeyFiles(originalFilePath, cargoKeyNumber + shippingSampleNumber + sparePartsNumber + spareKeysNumber
                     , DEFAULT_SPARE_KEYS_KEY_NUMBER_PER_FILE, spareKeysDir);
         }
