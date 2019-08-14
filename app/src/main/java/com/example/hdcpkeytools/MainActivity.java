@@ -15,7 +15,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 //        readConfiguration();
-        String path = new FileUtils(this).searchFileInFactoryTestPath("or_key.bin");
+        String path = new FileUtils(this).searchFileInHDCPPath("or_key.bin");
         if (path == null) {
             Toast.makeText(this, "找不到文件：udisk/HDCP_OR_KEY/or_key.bin", Toast.LENGTH_LONG).show();
         } else {
@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
                             , outputPath);
             new Md5Utils().getMd5OfDirToFile(outputPath, udiskPath + "md5.txt");
             //移动MD5到输出的目录中
-            new File(udiskPath + "/md5.txt").renameTo(new File(outputPath + "md5.txt"));
+            new File(udiskPath + "md5.txt").renameTo(new File(outputPath + "md5.txt"));
         }
     }
 }

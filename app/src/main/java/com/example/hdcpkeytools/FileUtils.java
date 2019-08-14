@@ -26,7 +26,7 @@ public class FileUtils {
      * @param fileName 查找的目标文件名
      * @return 查找的文件是否存在
      */
-    public String searchFileInFactoryTestPath(String fileName) {
+    public String searchFileInHDCPPath(String fileName) {
         GetMountPoint getMountPoint = new GetMountPoint(mContext);
         List<GetMountPoint.MountPoint> arrayList = getMountPoint.getMountedPoint();
         for (GetMountPoint.MountPoint mountPoint :
