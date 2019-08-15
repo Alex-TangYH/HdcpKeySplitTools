@@ -11,6 +11,25 @@ android {
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+    /**
+     * use your signingConfigs
+     */
+    signingConfigs {
+        release {
+            storeFile file("../../signApk/platform.jks")
+            storePassword 'android'
+            keyAlias 's905platformkey'
+            keyPassword 'android'
+        }
+
+        debug {
+            storeFile file("../../signApk/platform.jks")
+            storePassword 'android'
+            keyAlias 's905platformkey'
+            keyPassword 'android'
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
